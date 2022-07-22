@@ -3,14 +3,22 @@ pragma solidity ^0.5.0;
 contract Bank {
 
     mapping( address => uint256) public balances;
-
+    bool onWithdraw = false;
     event Deposit ( address from, uint256 value);
     event Withdraw( address to, uint256 value);
     event Transfer( address from, address to, uint256 value);
 
+    modifier denial_reenterance(){
+        require( onWithdraw == false );
+        onWithdraw =true;
+        _;
+        onWithdraw=false;
+    }
     constructor() public payable{
         balances[msg.sender] = msg.value;
     }
+
+
 
     function deposit() public payable {
         balances[msg.sender] += msg.value;
@@ -19,6 +27,7 @@ contract Bank {
 
     function withdraw(uint256 value) public payable {
         address payable to = address( uint160(msg.sender) );
+        require(balances[msg.sender] >= value);
         //to.transfer(value);
         to.call.value(value)("");
         emit Withdraw(to, value);

@@ -8,9 +8,7 @@ contract SimpleDefi{
     address public contractManager;
     mapping( string => IERC20) public tokens;
     mapping( string => uint256) public exchangeRatio;
-    Token public defiToken;
-    mapping( address => mapping( string => uint256)) public balances;
-    
+    Token public defiToken;    
 
     constructor () public {
         //디파이 컨트랙트가 생성되면, 디파이 토큰 컨트랙트를 배포하여 자장해 둡니다.
